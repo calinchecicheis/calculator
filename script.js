@@ -27,13 +27,13 @@ function backspace() {
 
 function appendNumber(number) {
     if (number === '.' && current.includes('.')) return
-    if (number ==='.') {current = '0'}
+    if (number === '.') { current = '0' }
     current = current.toString() + number.toString()
 }
 
 function selectOperation(operator) {
     operation = operator
-    console.log(operation)
+
     history = history + current + operation.toString()
     current = ''
     updateDisplay()
@@ -41,10 +41,11 @@ function selectOperation(operator) {
 
 function calculate() {
     history = history + current
+    lastCharInString = history.slice(-1)
+    if (isNaN(lastCharInString)) return
     current = eval(history)
-    history = ''
-    updateDisplay()
-    
+        history = ''
+        updateDisplay()
 }
 
 function updateDisplay() {
@@ -77,5 +78,6 @@ deleteButton.addEventListener("click", () => {
 
 equalsButton.addEventListener("click", () => {
     calculate()
-    
+
 })
+
