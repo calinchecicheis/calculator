@@ -7,17 +7,14 @@ const negativeButton = document.querySelector('.negative')
 const historyDisplay = document.querySelector('.history')
 const currentDisplay = document.querySelector('.current-display')
 
-
-
 let current = ''
 let history = ''
-let operation = undefined
-let result = 0
+let operation = ''
 
 function clear() {
     current = ''
     history = ''
-    operation = undefined
+    operation = ''
 
 }
 
@@ -33,25 +30,30 @@ function appendNumber(number) {
 
 function selectOperation(operator) {
     operation = operator
-
     history = history + current + operation.toString()
     current = ''
     updateDisplay()
+    if (isNaN(history.slice(-1))){
+    
+    }
 }
 
 function calculate() {
+    if (history == '') return
     history = history + current
-    lastCharInString = history.slice(-1)
-    if (isNaN(lastCharInString)) return
+    
+    if (isNaN(history.slice(-1))) return
     current = eval(history)
-        history = ''
-        updateDisplay()
+    history = ''
+    updateDisplay()
 }
 
 function updateDisplay() {
     currentDisplay.innerText = current
     historyDisplay.innerText = history
 }
+
+
 
 numberButtons.forEach(button => {
     button.addEventListener("click", () => {
@@ -78,6 +80,5 @@ deleteButton.addEventListener("click", () => {
 
 equalsButton.addEventListener("click", () => {
     calculate()
-
 })
 
