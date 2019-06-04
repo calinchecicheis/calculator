@@ -15,17 +15,20 @@ function clear() {
     current = ''
     history = ''
     operation = ''
-
+    updateDisplay()
 }
 
 function backspace() {
     current = current.slice(0, -1)
+    updateDisplay()
 }
 
 function appendNumber(number) {
+    if (number === '.' && current == '') { current = '0' }
     if (number === '.' && current.includes('.')) return
-    if (number === '.') { current = '0' }
+
     current = current.toString() + number.toString()
+    updateDisplay()
 }
 
 function selectOperation(operator) {
@@ -33,15 +36,13 @@ function selectOperation(operator) {
     history = history + current + operation.toString()
     current = ''
     updateDisplay()
-    if (isNaN(history.slice(-1))){
-    
-    }
+
 }
 
 function calculate() {
     if (history == '') return
     history = history + current
-    
+
     if (isNaN(history.slice(-1))) return
     current = eval(history)
     history = ''
@@ -58,24 +59,47 @@ function updateDisplay() {
 numberButtons.forEach(button => {
     button.addEventListener("click", () => {
         appendNumber(button.innerText)
-        updateDisplay()
+        
     })
+})
+
+document.addEventListener("keydown" , e => {
+    if ((e.keyCode >= 48 && e.keyCode <= 57) || e.key == '.' || (e.keyCode >= 96 && e.keyCode <= 105)) { 
+        appendNumber(e.key)
+    }
+    
+    if (e.key == '+' || e.key == '-' || e.key == '*' || e.key == '/') { 
+        selectOperation(e.key)
+    }
+
+    if (e.key == '=') {
+        calculate()
+    }
+    
+    if (e.key == 'Backspace') {
+        backspace()
+    }
+
+ 
 })
 
 operationButtons.forEach(button => {
     button.addEventListener("click", () => {
-        selectOperation(button.innerText)
+        if (isNaN(history.slice(-1))) {
+            history = history.slice(0, -1)
+            selectOperation(button.innerText)
+        } else {
+            selectOperation(button.innerText)
+        }
     })
 })
 
 clearButton.addEventListener("click", () => {
     clear()
-    updateDisplay()
 })
 
 deleteButton.addEventListener("click", () => {
     backspace()
-    updateDisplay()
 })
 
 equalsButton.addEventListener("click", () => {
